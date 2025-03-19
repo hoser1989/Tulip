@@ -224,7 +224,7 @@ def checkTulipIfSynced(order_number):
     data = response.json()
 
     if not isinstance(data, list):  # Check, if JSON is a list
-        print("Błąd: Oczekiwano listy, ale otrzymano:", type(data))
+        print("Error: List was expected, but received:", type(data))
         return None
 
     df = pd.DataFrame(data)
@@ -382,4 +382,17 @@ else:
     print('No data returned.')
 
 
+#Tests
+# results = getActiveTulipProductionOrdersALL()
+# print(results)
 
+# beginning_of_the_day = datetime.combine(datetime.today(), datetime.min.time())
+# beginning_of_the_day_minus1 = beginning_of_the_day - timedelta(days=1)
+# beginning_of_the_day_minus_1_str = beginning_of_the_day_minus1.strftime('%Y-%m-%dT%H:%M:%SZ')
+#
+# end_of_the_day_minus1 = beginning_of_the_day
+# end_of_the_day_minus1_str = end_of_the_day_minus1.strftime('%Y-%m-%dT%H:%M:%SZ')
+# print(beginning_of_the_day_minus1, end_of_the_day_minus1_str)
+#
+# result = getTulipProductionOrders(beginning_of_the_day_minus_1_str, end_of_the_day_minus1_str)
+# print(result)
