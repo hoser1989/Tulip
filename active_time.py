@@ -117,7 +117,7 @@ for as_index, as_row in active_stations.iterrows(): #get active stations (status
                 now = datetime.now(timezone.utc)
                 active_time = (now - start_date_object).total_seconds()
                 total_active_time += active_time # add active time to a total time
-                print(as_row.id, t_row.id, start_date, start_date_object, now, active_time)
+                # print(as_row.id, t_row.id, start_date, start_date_object, now, active_time)
             else:
                 # start_date_object = datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%SZ")
                 # end_date_object = datetime.strptime(end_date, "%Y-%m-%dT%H:%M:%SZ")
@@ -125,7 +125,7 @@ for as_index, as_row in active_stations.iterrows(): #get active stations (status
                 end_date_object = parser.isoparse(end_date)
                 active_time = (end_date_object - start_date_object).total_seconds()
                 total_active_time += active_time # add active time to a total time
-                print(as_row.id, t_row.id, start_date, start_date_object, end_date, end_date_object, active_time)
+                # print(as_row.id, t_row.id, start_date, start_date_object, end_date, end_date_object, active_time)
         # print(f"{as_row.id} {as_row.onrzu_work_order}: {total_active_time}")
         updateStationActiveTime(as_row.id, 'qbteq_breaks', total_active_time)
 

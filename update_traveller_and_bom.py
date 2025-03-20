@@ -133,7 +133,7 @@ def sendToTulip(df, table_id):
             payload = row.to_dict()  # Convert row to dictionary (JSON-like)
 
             try:
-                print(payload)
+                #print(payload)
                 response = session.post(url, json=payload)
                 response.raise_for_status()  # Raise exception for bad responses
 
@@ -157,11 +157,11 @@ def updateTulipSyncRecord(record_id, fieldId, fieldValue):
             }
 
         try:
-            print(f"Updating record {record_id}: {payload}")
+            #print(f"Updating record {record_id}: {payload}")
             response = session.put(url, json=payload)
             response.raise_for_status()  # Sprawdzenie błędów
 
-            print(f"Record {record_id} updated successfully: {response.json()}")
+            #print(f"Record {record_id} updated successfully: {response.json()}")
 
         except requests.exceptions.RequestException as e:
             print(f"Error updating record {record_id}: {e}")
@@ -182,11 +182,11 @@ def createTulipSyncRecord(record_id):
         session.auth = HTTPBasicAuth(user, pwd)
 
         try:
-            print(f"Sending data: {payload}")
+            #print(f"Sending data: {payload}")
             response = session.post(url, json=payload)
             response.raise_for_status()  # Check error
 
-            print(f"Record {record_id} sent successfully: {response.json()}")
+            #print(f"Record {record_id} sent successfully: {response.json()}")
 
         except requests.exceptions.RequestException as e:
             print(f"Error sending record {record_id}: {e}")
@@ -202,7 +202,7 @@ def checkIfTulipOrderExists(order_number):
     response = requests.get(url, auth=(user, pwd), headers=headers)
 
     if response.status_code != 200:
-        print('Status:', response.status_code, 'Headers:', response.headers, 'Error Response:', response.json())
+        #print('Status:', response.status_code, 'Headers:', response.headers, 'Error Response:', response.json())
         exit()
 
     data = response.json()
@@ -218,7 +218,7 @@ def checkTulipIfSynced(order_number):
     response = requests.get(url, auth=(user, pwd), headers=headers)
 
     if response.status_code != 200:
-        print('Status:', response.status_code, 'Headers:', response.headers, 'Error Response:', response.json())
+        #print('Status:', response.status_code, 'Headers:', response.headers, 'Error Response:', response.json())
         exit()
 
     data = response.json()
@@ -251,7 +251,7 @@ def getTulipProductionOrders(datetime_from, datetime_to, all = False):
     response = requests.get(url, auth=(user, pwd), headers=headers)
 
     if response.status_code != 200:
-        print('Status:', response.status_code, 'Headers:', response.headers, 'Error Response:', response.json())
+        #print('Status:', response.status_code, 'Headers:', response.headers, 'Error Response:', response.json())
         exit()
 
     data = response.json()
