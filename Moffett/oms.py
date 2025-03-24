@@ -69,7 +69,7 @@ def M_OMSConfiguration(project, order):
     return df
 
 
-def M_SalesOrderData(order):
+def M_SalesOrderData(project):
     server = 'fihel1-sp080SQL.mcint.local,50002'
     database = 'oms'
     username = 'oms_reader'
@@ -107,9 +107,9 @@ def M_SalesOrderData(order):
                     INNER JOIN [address] da ON so.sales_order_id = da.sales_order_id and da.address_type = 1
                 where
                 so.company_id = 'D82845F8-B439-4C28-9877-CB2544CA12A8'
-                and sol.production_order_number = ?"""
+                and so.global_order_no like ?"""
 
-    cursor.execute(sql, [order])
+    cursor.execute(sql, (f"%{project}%",))
     q_res = cursor.fetchall()
 
     if q_res:
@@ -118,12 +118,12 @@ def M_SalesOrderData(order):
         # Convert to DataFrame
         columns = [desc[0] for desc in cursor.description]
         df = pd.DataFrame(np_data, columns=columns)
-        df["ID"] = order + "-" + df.index.astype(str)
-        df["Production Order"] = order
+        df["ID"] = project + "-" + df.index.astype(str)
+        df["Project"] = project
 
         column_mapping = {
             "ID": "id",
-            "Production Order": "ippgo_production_order",
+            "Project": "ippgo_production_order",
             "Global Order Number": "udeys_global_order_number",
             "Created Date": "yxpjm_created_date",
             "Delivery Name": "ykzzy_delivery_name",
