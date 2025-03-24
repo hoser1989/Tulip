@@ -4,7 +4,7 @@ import pandas as pd
 import requests
 from requests.auth import HTTPBasicAuth
 import json
-
+from datetime import datetime, timedelta
 
 def sendToTulip(df, table_id):
     url = f'https://hiab.tulip.co/api/v3/tables/{table_id}/records'
@@ -233,23 +233,24 @@ def getActiveTulipProductionOrdersALL(tableId):
 
 
 #Execute
-# beginning_of_the_day = datetime.combine(datetime.today(), datetime.min.time())
-# beginning_of_the_day_str = beginning_of_the_day.strftime('%Y-%m-%dT%H:%M:%SZ')
-# end_of_the_day = beginning_of_the_day + timedelta(days=1)
-# end_of_the_day_str = end_of_the_day.strftime('%Y-%m-%dT%H:%M:%SZ')
-#
-# result = getTulipProductionOrders(beginning_of_the_day_str, end_of_the_day_str)
+beginning_of_the_day = datetime.combine(datetime.today(), datetime.min.time())
+beginning_of_the_day_str = beginning_of_the_day.strftime('%Y-%m-%dT%H:%M:%SZ')
+end_of_the_day = beginning_of_the_day + timedelta(days=1)
+end_of_the_day_str = end_of_the_day.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+result = getTulipProductionOrders('Jii944sA7s3kS5pu8_DEFAULT', beginning_of_the_day_str, end_of_the_day_str)
 
 production_orders_table_id = 'Jii944sA7s3kS5pu8_DEFAULT'
 sync_table_id = 'F8msta7LuWpSHqXPz'
 oms_conf_table_id = 'HpCsSgXsoWxPuQTit'
+oms_sales_order_data_table_id = 'xkHFpjXYMbE2heyn5'
 pss_table_id = 'JB6jTG755K3BFFAyS'
 bom_table_id = 'K6y2f8AiFpK8SbscT'
 
-result = getActiveTulipProductionOrdersALL('Jii944sA7s3kS5pu8_DEFAULT')
+# result = getActiveTulipProductionOrdersALL('Jii944sA7s3kS5pu8_DEFAULT')
+
 if not result.empty:
     for index,row in result.iterrows():
-        print(row['id'])
         sync_status = checkTulipIfSynced(sync_table_id,row['id'])
         if sync_status.empty:
             createTulipRecord(sync_table_id,row['id'])
@@ -261,11 +262,16 @@ if not result.empty:
             bom = ln.M_billOfMaterial(row['id'])
             sendToTulip(bom, bom_table_id)
             updateTulipRecord(sync_table_id, row['id'], 'uazuq_bom', True)
-            #update oms
+            #update oms configuration
             if row['ntxzj_item_master_id']:
                 oms_configuration = oms.M_OMSConfiguration(row['ntxzj_item_master_id'], row['id'])
                 sendToTulip(oms_configuration,oms_conf_table_id)
                 updateTulipRecord(sync_table_id,row['id'], 'gqlel_oms_configuration', True)
+            #update oms sales order data
+            oms_sales_order_data = oms.M_SalesOrderData(row['id'])
+            if not oms_sales_order_data.empty:
+                sendToTulip(oms_sales_order_data,oms_sales_order_data_table_id)
+                updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
         else:
             if not sync_status['jrbjn_traveller'].values:
                 # update production specification summary
@@ -283,6 +289,12 @@ if not result.empty:
                     oms_configuration = oms.M_OMSConfiguration(row['ntxzj_item_master_id'], row['id'])
                     sendToTulip(oms_configuration,oms_conf_table_id)
                     updateTulipRecord(sync_table_id, row['id'], 'gqlel_oms_configuration', True)
+            if not sync_status['bhutr_oms_sales_order_data'].values:
+                # update oms sales order data
+                oms_sales_order_data = oms.M_SalesOrderData(row['id'])
+                if not oms_sales_order_data.empty:
+                    sendToTulip(oms_sales_order_data, oms_sales_order_data_table_id)
+                    updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
 else:
     print('No data returned.')
 
@@ -300,16 +312,13 @@ else:
 # print(beginning_of_the_day_minus1, end_of_the_day_minus1_str)
 #
 # result = getTulipProductionOrders(beginning_of_the_day_minus_1_str, end_of_the_day_minus1_str)
-# print(result)
-
-# res = productionSpecificationSummary('D01036289')
-# print(res)
-#
-# result = oms.MoffettOMSConfiguration(501937)
-# print(result)
 
 #Update one
 # pss = ln.M_productionSpecificationSummary('D01036197')
 # sendToTulip(pss, pss_table_id)
 # updateTulipRecord(sync_table_id, 'D01036197', 'jrbjn_traveller', True)
+
+# oms_sales_order_data = oms.M_SalesOrderData('D01035411')
+# sendToTulip(oms_sales_order_data, oms_sales_order_data_table_id)
+# updateTulipRecord(sync_table_id, 'D01027134', 'bhutr_oms_sales_order_data', True)
 
