@@ -1,3 +1,5 @@
+from numpy.testing.print_coercion_tables import print_coercion_table
+
 import oms
 import ln
 import pandas as pd
@@ -239,7 +241,7 @@ end_of_the_day = beginning_of_the_day + timedelta(days=1)
 end_of_the_day_str = end_of_the_day.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 # result = getTulipProductionOrders('Jii944sA7s3kS5pu8_DEFAULT', beginning_of_the_day_str, end_of_the_day_str)
-
+#
 production_orders_table_id = 'Jii944sA7s3kS5pu8_DEFAULT'
 sync_table_id = 'F8msta7LuWpSHqXPz'
 oms_conf_table_id = 'HpCsSgXsoWxPuQTit'
@@ -268,10 +270,11 @@ if not result.empty:
                 sendToTulip(oms_configuration,oms_conf_table_id)
                 updateTulipRecord(sync_table_id,row['id'], 'gqlel_oms_configuration', True)
             #update oms sales order data
-            oms_sales_order_data = oms.M_SalesOrderData(row['ntxzj_item_master_id'])
-            if not oms_sales_order_data.empty:
-                sendToTulip(oms_sales_order_data,oms_sales_order_data_table_id)
-                updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
+            if row['ntxzj_item_master_id']:
+                oms_sales_order_data = oms.M_SalesOrderData(row['ntxzj_item_master_id'])
+                if not oms_sales_order_data.empty:
+                    sendToTulip(oms_sales_order_data.iloc[:1],oms_sales_order_data_table_id)
+                    updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
         else:
             if not sync_status['jrbjn_traveller'].values:
                 # update production specification summary
@@ -290,11 +293,12 @@ if not result.empty:
                     sendToTulip(oms_configuration,oms_conf_table_id)
                     updateTulipRecord(sync_table_id, row['id'], 'gqlel_oms_configuration', True)
             if not sync_status['bhutr_oms_sales_order_data'].values:
-                # update oms sales order data
-                oms_sales_order_data = oms.M_SalesOrderData(row['ntxzj_item_master_id'])
-                if not oms_sales_order_data.empty:
-                    sendToTulip(oms_sales_order_data, oms_sales_order_data_table_id)
-                    updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
+                if row['ntxzj_item_master_id']:
+                    # update oms sales order data
+                    oms_sales_order_data = oms.M_SalesOrderData(row['ntxzj_item_master_id'])
+                    if not oms_sales_order_data.empty:
+                        sendToTulip(oms_sales_order_data.iloc[:1], oms_sales_order_data_table_id)
+                        updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
 else:
     print('No data returned.')
 
