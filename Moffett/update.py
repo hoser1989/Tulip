@@ -240,7 +240,7 @@ beginning_of_the_day_str = beginning_of_the_day.strftime('%Y-%m-%dT%H:%M:%SZ')
 end_of_the_day = beginning_of_the_day + timedelta(days=1)
 end_of_the_day_str = end_of_the_day.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-# result = getTulipProductionOrders('Jii944sA7s3kS5pu8_DEFAULT', beginning_of_the_day_str, end_of_the_day_str)
+result = getTulipProductionOrders('Jii944sA7s3kS5pu8_DEFAULT', beginning_of_the_day_str, end_of_the_day_str)
 #
 production_orders_table_id = 'Jii944sA7s3kS5pu8_DEFAULT'
 sync_table_id = 'F8msta7LuWpSHqXPz'
@@ -249,7 +249,7 @@ oms_sales_order_data_table_id = 'xkHFpjXYMbE2heyn5'
 pss_table_id = 'JB6jTG755K3BFFAyS'
 bom_table_id = 'K6y2f8AiFpK8SbscT'
 
-result = getActiveTulipProductionOrdersALL('Jii944sA7s3kS5pu8_DEFAULT')
+# result = getActiveTulipProductionOrdersALL('Jii944sA7s3kS5pu8_DEFAULT')
 
 if not result.empty:
     for index,row in result.iterrows():
