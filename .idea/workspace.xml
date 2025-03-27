@@ -5,15 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5c57773a-378c-4447-9a9c-150060bb676e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Moffett/api/api_get.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Moffett/api/api_post.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Moffett/api/api_put.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Moffett/update_long_break.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Moffett/update_short_break.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Moffett/active_time.py" beforeDir="false" afterPath="$PROJECT_DIR$/Moffett/update_active_time.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Moffett/update.py" beforeDir="false" afterPath="$PROJECT_DIR$/Moffett/update.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tulip (Active Time).xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/Moffett/update_end_of_shift.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Moffett/update_long_break.py" beforeDir="false" afterPath="$PROJECT_DIR$/Moffett/update_long_break.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Moffett/update_short_break.py" beforeDir="false" afterPath="$PROJECT_DIR$/Moffett/update_short_break.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +81,7 @@
       <workItem from="1742844506865" duration="824000" />
       <workItem from="1742891965641" duration="10583000" />
       <workItem from="1742978855731" duration="11998000" />
-      <workItem from="1743065611815" duration="3509000" />
+      <workItem from="1743065611815" duration="3824000" />
     </task>
     <servers />
   </component>

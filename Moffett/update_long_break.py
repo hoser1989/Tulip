@@ -31,5 +31,5 @@ for index, row in active_stations.iterrows():
         api_post.createTaskRecord(task_table_id, last_id_str, row['id'], row['onrzu_work_order'],
                               'admin', 'Planned Lost Time', 'Closed',
                               dynamic_long_break_start_date, dynamic_long_break_start_end, 1800,
-                              'test', 'Planned Lost Time', row['dqzxf_family'], 'admin' )
+                              'Long Break', 'Planned Lost Time', row['dqzxf_family'], 'admin' )
 
