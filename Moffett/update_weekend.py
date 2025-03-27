@@ -1,16 +1,17 @@
 from api import api_get, api_post
+from dateutil import parser
 from datetime import datetime
 
 # Get todays date
 today = datetime.today().strftime('%Y-%m-%d')
 
 # Fixed hour
-eos_fixed_time_start = "T17:00:00Z"
-eos_fixed_time_end = "T08:30:00Z"
+weekend_fixed_time_start = "T14:00:00Z"
+weekend_fixed_time_end = "T08:30:00Z"
 
 #Long break
-dynamic_eos_start_date = f"{today}{eos_fixed_time_start}"
-dynamic_eos_start_end = f"{today}{eos_fixed_time_end}"
+dynamic_weekend_start_date = f"{today}{weekend_fixed_time_start}"
+dynamic_weekend_start_end = f"{today}{weekend_fixed_time_end}"
 
 
 task_table_id = 'zoMehkj3DDaWcosvn'
@@ -27,6 +28,6 @@ for index, row in active_stations.iterrows():
     if last_id_str:
         api_post.createTaskRecord(task_table_id, last_id_str, row['id'], row['onrzu_work_order'],
                               'admin', 'Planned Lost Time', 'Closed',
-                              dynamic_eos_start_date, dynamic_eos_start_end, 55200,
+                              dynamic_weekend_start_date, dynamic_weekend_start_end, 237600,
                               'End of shift', 'Planned Lost Time', row['dqzxf_family'], 'admin' )
 
