@@ -108,14 +108,14 @@ def getActiveProductionOrdersALL(tableId):
     user = 'apikey.2_YbECmsfBSjhGwYf3T'
     pwd = 'GO01NhVXEikyXQ-uksiQ4v6nPplEtoAW-sVklVtUAfs'
 
-    # filters = [
-    #     {"field": "levog_status", "functionType": "isIn", "arg": ['Active', 'Released']}
-    # ]
-
     filters = [
-        {"field": "yqhhz_family", "functionType": "isIn", "arg": ['MFT02', 'MFT02A']},
-        {"field": "levog_status", "functionType": "isIn", "arg": ['Completed', 'Production Completed']}
+        {"field": "levog_status", "functionType": "isIn", "arg": ['Active', 'Released']}
     ]
+
+    # filters = [
+    #     {"field": "yqhhz_family", "functionType": "isIn", "arg": ['MFT02', 'MFT02A']},
+    #     {"field": "levog_status", "functionType": "isIn", "arg": ['Completed', 'Production Completed']}
+    # ]
 
     filters_str = json.dumps(filters)  # Convert to proper JSON format
 
