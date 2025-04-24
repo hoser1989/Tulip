@@ -109,7 +109,7 @@ def M_SalesOrderData(project):
                 so.company_id = 'D82845F8-B439-4C28-9877-CB2544CA12A8'
                 and so.global_order_no like ?"""
 
-    cursor.execute(sql, (f"%{project}%",))
+    cursor.execute(sql, (f"CS-OR{project}%",))
     q_res = cursor.fetchall()
 
     if q_res:
