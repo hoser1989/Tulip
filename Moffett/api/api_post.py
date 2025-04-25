@@ -18,7 +18,7 @@ def sendToTulip(df, table_id):
                 response = session.post(url, json=payload)
                 response.raise_for_status()  # Raise exception for bad responses
 
-                #print(f"Row {index} sent successfully: {response.json()}")
+                print(f"Row {index} sent successfully: {response.json()}")
 
             except requests.exceptions.RequestException as e:
                 print(f"Error sending row {index}: {e}")

@@ -20,56 +20,57 @@ oms_sales_order_data_table_id = 'xkHFpjXYMbE2heyn5'
 pss_table_id = 'JB6jTG755K3BFFAyS'
 bom_table_id = 'K6y2f8AiFpK8SbscT'
 
-# result = api_get.getActiveProductionOrdersALL('Jii944sA7s3kS5pu8_DEFAULT')
+#result = api_get.getActiveProductionOrdersALL('Jii944sA7s3kS5pu8_DEFAULT')
 
 if not result.empty:
     for index,row in result.iterrows():
-        sync_status = api_get.checkTulipIfSynced(sync_table_id,row['id'])
-        if sync_status.empty:
-            api_post.createSyncRecord(sync_table_id,row['id'])
-            # update production specification summary
-            pss = ln.M_productionSpecificationSummary(row['id'])
-            api_post.sendToTulip(pss, pss_table_id)
-            api_put.updateTulipRecord(sync_table_id, row['id'], 'jrbjn_traveller', True)
-            # update bom
-            bom = ln.M_billOfMaterial(row['id'])
-            api_post.sendToTulip(bom, bom_table_id)
-            api_put.updateTulipRecord(sync_table_id, row['id'], 'uazuq_bom', True)
-            #update oms configuration
-            if row['ntxzj_item_master_id']:
-                oms_configuration = oms.M_OMSConfiguration(row['ntxzj_item_master_id'], row['id'])
-                api_post.sendToTulip(oms_configuration,oms_conf_table_id)
-                api_put.updateTulipRecord(sync_table_id,row['id'], 'gqlel_oms_configuration', True)
-            #update oms sales order data
-            if row['ntxzj_item_master_id']:
-                oms_sales_order_data = oms.M_SalesOrderData(row['ntxzj_item_master_id'])
-                if not oms_sales_order_data.empty:
-                    api_post.sendToTulip(oms_sales_order_data.iloc[:1],oms_sales_order_data_table_id)
-                    api_put.updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
-        else:
-            if not sync_status['jrbjn_traveller'].values:
+        if row['id'] != 'EMPTY':
+            sync_status = api_get.checkTulipIfSynced(sync_table_id,row['id'])
+            if sync_status.empty:
+                api_post.createSyncRecord(sync_table_id,row['id'])
                 # update production specification summary
                 pss = ln.M_productionSpecificationSummary(row['id'])
                 api_post.sendToTulip(pss, pss_table_id)
                 api_put.updateTulipRecord(sync_table_id, row['id'], 'jrbjn_traveller', True)
-            if not sync_status['uazuq_bom'].values:
                 # update bom
                 bom = ln.M_billOfMaterial(row['id'])
                 api_post.sendToTulip(bom, bom_table_id)
                 api_put.updateTulipRecord(sync_table_id, row['id'], 'uazuq_bom', True)
-            if not sync_status['gqlel_oms_configuration'].values:
+                #update oms configuration
                 if row['ntxzj_item_master_id']:
-                    # update OMS configuration
                     oms_configuration = oms.M_OMSConfiguration(row['ntxzj_item_master_id'], row['id'])
                     api_post.sendToTulip(oms_configuration,oms_conf_table_id)
-                    api_put.updateTulipRecord(sync_table_id, row['id'], 'gqlel_oms_configuration', True)
-            if not sync_status['bhutr_oms_sales_order_data'].values:
+                    api_put.updateTulipRecord(sync_table_id,row['id'], 'gqlel_oms_configuration', True)
+                #update oms sales order data
                 if row['ntxzj_item_master_id']:
-                    # update oms sales order data
                     oms_sales_order_data = oms.M_SalesOrderData(row['ntxzj_item_master_id'])
                     if not oms_sales_order_data.empty:
-                        api_post.sendToTulip(oms_sales_order_data.iloc[:1], oms_sales_order_data_table_id)
+                        api_post.sendToTulip(oms_sales_order_data.iloc[:1],oms_sales_order_data_table_id)
                         api_put.updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
+            else:
+                if not sync_status['jrbjn_traveller'].values:
+                    # update production specification summary
+                    pss = ln.M_productionSpecificationSummary(row['id'])
+                    api_post.sendToTulip(pss, pss_table_id)
+                    api_put.updateTulipRecord(sync_table_id, row['id'], 'jrbjn_traveller', True)
+                if not sync_status['uazuq_bom'].values:
+                    # update bom
+                    bom = ln.M_billOfMaterial(row['id'])
+                    api_post.sendToTulip(bom, bom_table_id)
+                    api_put.updateTulipRecord(sync_table_id, row['id'], 'uazuq_bom', True)
+                if not sync_status['gqlel_oms_configuration'].values:
+                    if row['ntxzj_item_master_id']:
+                        # update OMS configuration
+                        oms_configuration = oms.M_OMSConfiguration(row['ntxzj_item_master_id'], row['id'])
+                        api_post.sendToTulip(oms_configuration,oms_conf_table_id)
+                        api_put.updateTulipRecord(sync_table_id, row['id'], 'gqlel_oms_configuration', True)
+                if not sync_status['bhutr_oms_sales_order_data'].values:
+                    if row['ntxzj_item_master_id']:
+                        # update oms sales order data
+                        oms_sales_order_data = oms.M_SalesOrderData(row['ntxzj_item_master_id'])
+                        if not oms_sales_order_data.empty:
+                            api_post.sendToTulip(oms_sales_order_data.iloc[:1], oms_sales_order_data_table_id)
+                            api_put.updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
 else:
     print('No data returned.')
 

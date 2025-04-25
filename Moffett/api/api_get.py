@@ -245,3 +245,34 @@ def getActiveStations(filters, limit):
     df = pd.DataFrame(data)  # Create DataFrame
 
     return df  # Dataframe result
+
+def getSyncOrders(tableId):
+    user = 'apikey.2_YbECmsfBSjhGwYf3T'
+    pwd = 'GO01NhVXEikyXQ-uksiQ4v6nPplEtoAW-sVklVtUAfs'
+
+    base_url = f'https://hiab.tulip.co/api/v3/tables/{tableId}/records'
+    headers = {"Content-Type": "application/json", "Accept": "application/json"}
+
+    all_records = []
+    offset = 0
+    limit = 100  # Max Limit
+
+    while True:
+        url = f'{base_url}?limit={limit}&offset={offset}'
+        response = requests.get(url, auth=(user, pwd), headers=headers)
+
+        if response.status_code != 200:
+            print('Status:', response.status_code, 'Headers:', response.headers, 'Error Response:', response.json())
+            break
+
+        data = response.json()
+
+        if not isinstance(data, list) or len(data) == 0:  # Check if list is empty
+            break
+
+        all_records.extend(data)
+        offset += limit  # We shift the offset by the limit to fetch the next records
+
+    df = pd.DataFrame(all_records)  # Create DataFrame
+
+    return df  # Retrurn only "id"
