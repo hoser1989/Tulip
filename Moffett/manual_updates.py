@@ -10,7 +10,15 @@ oms_conf_table_id = 'HpCsSgXsoWxPuQTit'
 oms_sales_order_data_table_id = 'xkHFpjXYMbE2heyn5'
 pss_table_id = 'JB6jTG755K3BFFAyS'
 bom_table_id = 'K6y2f8AiFpK8SbscT'
+serialized_items_id = 'RZxzXt8qm9jLcejmY'
 
+
+# result = api_get.getActiveProductionOrdersALL('Jii944sA7s3kS5pu8_DEFAULT')
+# for index, row in result.iterrows():
+#     if 'EMPTY' not in row['id'] and 'TEST' not in row['id']:
+#         serialized_items = ln.M_SerializedItems(row['id'])
+#         api_post.sendToTulip(serialized_items, serialized_items_id)
+#         api_put.updateTulipRecord(sync_table_id, row['id'], 'tlmrb_serialized_items', True)
 
 #Update one
 # pss = ln.M_productionSpecificationSummary('D01036197')

@@ -115,3 +115,41 @@ def M_billOfMaterial(order_number):
     con.close()
     return df
 #---
+
+
+def M_SerializedItems(order_number):
+    # Connect to DB
+    or_dns = oracledb.makedsn('134.37.15.96', 1522, service_name='erpln6c')
+    con = oracledb.connect(user="tulip215db", password="tulip215f0rtulip215", dsn=or_dns)
+    cursor = con.cursor()
+
+    # SQL query
+    sql = """select
+                ticst001.t$pdno "Production Order",
+                ticst001.t$sitm "Item",
+                tcibd001.t$dsca "Item Description"
+            FROM ERPLN6C.tticst001215 ticst001
+            left join ERPLN6C.ttisfc010215 tisfc010 on tisfc010.t$pdno = ticst001.t$pdno and tisfc010.t$opno = ticst001.t$opno
+            inner join ERPLN6C.ttcibd001215 tcibd001 on tcibd001.t$item = ticst001.t$sitm
+            where ticst001.t$pdno = :production_order and tcibd001.t$seri = 1
+            order by tisfc010.t$cwoc
+                """
+
+    # Execute query
+    cursor.execute(sql, {'production_order': order_number})
+    q_res = cursor.fetchall()
+
+    #Convert to DataFrame
+    columns = [desc[0] for desc in cursor.description]  # Pobranie nazw kolumn
+    df = pd.DataFrame(q_res, columns=columns)
+    df["ID"] = df["Production Order"] + "-" + df.index.astype(str)
+
+    df = df.rename(columns={"ID": "id"})
+    df = df.rename(columns={"Production Order": "tseev_production_order"})
+    df = df.rename(columns={"Item": "qhxpc_item"})
+    df = df.rename(columns={"Item Description": "nigrc_item_description"})
+
+    # Close the connection
+    cursor.close()
+    con.close()
+    return df
