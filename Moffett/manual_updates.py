@@ -34,3 +34,17 @@ serialized_items_id = 'RZxzXt8qm9jLcejmY'
 # syncedOrders = api_get.getSyncOrders(sync_table_id)
 # for index, row in syncedOrders.iterrows():
 #     api_put.updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', False)
+
+# beginning_of_the_day = datetime.combine(datetime.today() -timedelta(1), datetime.min.time())
+# beginning_of_the_day_str = beginning_of_the_day.strftime('%Y-%m-%dT%H:%M:%SZ')
+# end_of_the_day = beginning_of_the_day + timedelta(days=1)
+# end_of_the_day_str = end_of_the_day.strftime('%Y-%m-%dT%H:%M:%SZ')
+#
+#
+# print(beginning_of_the_day_str)
+# print(end_of_the_day_str)
+#
+#
+# result = api_get.getProductionOrders('Jii944sA7s3kS5pu8_DEFAULT', beginning_of_the_day_str, end_of_the_day_str)
+# for index,row in result.iterrows():
+#     print(index,row['id'])

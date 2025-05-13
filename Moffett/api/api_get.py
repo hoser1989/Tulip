@@ -26,42 +26,42 @@ def checkTulipIfSynced(tableId, order_number):
 
 
 
-def getProductionOrders(tableId, datetime_from, datetime_to, all = False):
+def getProductionOrders(tableId, datetime_from, datetime_to):
     user = 'apikey.2_YbECmsfBSjhGwYf3T'
     pwd = 'GO01NhVXEikyXQ-uksiQ4v6nPplEtoAW-sVklVtUAfs'
 
     filters = [
         {"field": "_createdAt", "functionType": "greaterThanOrEqual", "arg": datetime_from},
         {"field": "_createdAt", "functionType": "lessThan", "arg": datetime_to},
-        # {"field": "levog_status", "functionType": "isIn", "arg": ['Active', 'Released']}
     ]
 
     filters_str = json.dumps(filters)  # Convert to proper JSON format
-    if all == False:
-        url = f'https://hiab.tulip.co/api/v3/tables/{tableId}/records?filters={filters_str}'
-    else:
-        url = f'https://hiab.tulip.co/api/v3/tables/{tableId}/records'
-
+    url = f'https://hiab.tulip.co/api/v3/tables/{tableId}/records'
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
-    response = requests.get(url, auth=(user, pwd), headers=headers)
+    all_records = []
+    offset = 0
+    limit = 100  # Max Limit
 
-    if response.status_code != 200:
-        #print('Status:', response.status_code, 'Headers:', response.headers, 'Error Response:', response.json())
-        exit()
+    while True:
+        url = f'{url}?filters={filters_str}&limit={limit}&offset={offset}'
+        response = requests.get(url, auth=(user, pwd), headers=headers)
 
-    data = response.json()
+        if response.status_code != 200:
+            print('Status:', response.status_code, 'Headers:', response.headers, 'Error Response:', response.json())
+            break
 
-    if not isinstance(data, list):  # Check if JSON is a list
-        print("Error: List was expected, but received:", type(data))
-        return None
+        data = response.json()
 
-    # If no records were found, return an empty DataFrame
-    if not data:
-        return pd.DataFrame()  # Return empty DataFrame if no data
+        if not isinstance(data, list) or len(data) == 0:  # Check if list is empty
+            break
 
-    df = pd.DataFrame(data)  # Create DataFrame
-    return df
+        all_records.extend(data)
+        offset += limit  # We shift the offset by the limit to fetch the next records
+
+    df = pd.DataFrame(all_records)  # Create DataFrame
+
+    return df  # Retrurn only "id"
 
     # production_order = df[['id']]
     # return production_order  # Dataframe result

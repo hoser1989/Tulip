@@ -3,6 +3,7 @@ from api import api_get, api_post, api_put
 import oms
 import ln
 from datetime import datetime, timedelta
+import sys
 
 
 #Execute
@@ -39,15 +40,17 @@ if not result.empty:
                 api_put.updateTulipRecord(sync_table_id, row['id'], 'uazuq_bom', True)
                 #update oms configuration
                 if row['ntxzj_item_master_id']:
-                    oms_configuration = oms.M_OMSConfiguration(row['ntxzj_item_master_id'], row['id'])
-                    api_post.sendToTulip(oms_configuration,oms_conf_table_id)
-                    api_put.updateTulipRecord(sync_table_id,row['id'], 'gqlel_oms_configuration', True)
+                    if row['ntxzj_item_master_id'][:2] != 'RD':
+                        oms_configuration = oms.M_OMSConfiguration(row['ntxzj_item_master_id'], row['id'])
+                        api_post.sendToTulip(oms_configuration,oms_conf_table_id)
+                        api_put.updateTulipRecord(sync_table_id,row['id'], 'gqlel_oms_configuration', True)
                 #update oms sales order data
                 if row['ntxzj_item_master_id']:
-                    oms_sales_order_data = oms.M_SalesOrderData(row['ntxzj_item_master_id'])
-                    if not oms_sales_order_data.empty:
-                        api_post.sendToTulip(oms_sales_order_data.iloc[:1],oms_sales_order_data_table_id)
-                        api_put.updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
+                    if row['ntxzj_item_master_id'][:2] != 'RD':
+                        oms_sales_order_data = oms.M_SalesOrderData(row['ntxzj_item_master_id'])
+                        if not oms_sales_order_data.empty:
+                            api_post.sendToTulip(oms_sales_order_data.iloc[:1],oms_sales_order_data_table_id)
+                            api_put.updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
                 #update serialized item
                 serialized_items = ln.M_SerializedItems(row['id'])
                 api_post.sendToTulip(serialized_items, serialized_items_id)
@@ -67,16 +70,18 @@ if not result.empty:
                 if not sync_status['gqlel_oms_configuration'].values:
                     if row['ntxzj_item_master_id']:
                         # update OMS configuration
-                        oms_configuration = oms.M_OMSConfiguration(row['ntxzj_item_master_id'], row['id'])
-                        api_post.sendToTulip(oms_configuration,oms_conf_table_id)
-                        api_put.updateTulipRecord(sync_table_id, row['id'], 'gqlel_oms_configuration', True)
+                        if row['ntxzj_item_master_id'][:2] != 'RD':
+                            oms_configuration = oms.M_OMSConfiguration(row['ntxzj_item_master_id'], row['id'])
+                            api_post.sendToTulip(oms_configuration,oms_conf_table_id)
+                            api_put.updateTulipRecord(sync_table_id, row['id'], 'gqlel_oms_configuration', True)
                 if not sync_status['bhutr_oms_sales_order_data'].values:
                     if row['ntxzj_item_master_id']:
-                        # update oms sales order data
-                        oms_sales_order_data = oms.M_SalesOrderData(row['ntxzj_item_master_id'])
-                        if not oms_sales_order_data.empty:
-                            api_post.sendToTulip(oms_sales_order_data.iloc[:1], oms_sales_order_data_table_id)
-                            api_put.updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
+                        if row['ntxzj_item_master_id'][:2] != 'RD':
+                            # update oms sales order data
+                            oms_sales_order_data = oms.M_SalesOrderData(row['ntxzj_item_master_id'])
+                            if not oms_sales_order_data.empty:
+                                api_post.sendToTulip(oms_sales_order_data.iloc[:1], oms_sales_order_data_table_id)
+                                api_put.updateTulipRecord(sync_table_id, row['id'], 'bhutr_oms_sales_order_data', True)
                 if not sync_status['tlmrb_serialized_items'].values:
                     # update serialized item
                     serialized_items = ln.M_SerializedItems(row['id'])
